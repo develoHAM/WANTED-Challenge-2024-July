@@ -1,25 +1,25 @@
-import IItems from '../interfaces/IItems';
 import IPaymentMethod from '../interfaces/IPaymentMethod';
+import Cart from './Cart';
 import POS from './POS';
 
 export default class Cashier {
-	#pos: POS;
-	constructor(pos: POS) {
-		this.#pos = pos;
-	}
+	#pos = new POS();
 
-	get pos() {
-		return this.#pos;
-	}
-
-	getTotal = (items: IItems) => {
-		return Object.keys(items).reduce((acc, currItemName) => {
-			return (acc += items[currItemName].price * items[currItemName].quantity);
-		}, 0);
+	getTotal = (cart: Cart) => {
+		return this.#pos.calculateTotal(cart);
 	};
 
-	processCheckout = (items: IItems, paymentMethod: IPaymentMethod) => {
-		const total = this.getTotal(items);
-		return this.#pos.processPayment(items, paymentMethod);
+	processPayment = (total: number, paymentMethod: IPaymentMethod) => {
+		this.#pos.processPayment(total, paymentMethod);
+	};
+
+	createReceipt = (cart: Cart, total: number, paymentMethod: IPaymentMethod) => {
+		return this.#pos.createReceipt(cart, total, paymentMethod);
+	};
+
+	processCheckout = (cart: Cart, paymentMethod: IPaymentMethod) => {
+		const total = this.getTotal(cart);
+		this.processPayment(total, paymentMethod);
+		return this.createReceipt(cart, total, paymentMethod);
 	};
 }

@@ -2,8 +2,10 @@ import BankAccount from './BankAccount';
 import IPaymentMethod from '../interfaces/IPaymentMethod';
 
 export default class DebitCard implements IPaymentMethod {
+	#owner: string;
 	#bankAccount: BankAccount;
-	constructor(bankAccount: BankAccount) {
+	constructor(owner: string, bankAccount: BankAccount) {
+		this.#owner = owner;
 		this.#bankAccount = bankAccount;
 	}
 	pay = (amount: number) => {
@@ -15,5 +17,9 @@ export default class DebitCard implements IPaymentMethod {
 
 	get bankAccount() {
 		return this.#bankAccount;
+	}
+
+	get owner() {
+		return this.#owner;
 	}
 }

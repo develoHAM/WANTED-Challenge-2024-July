@@ -2,9 +2,11 @@ import IPaymentMethod from '../interfaces/IPaymentMethod';
 import BankAccount from './BankAccount';
 
 export default class CreditCard implements IPaymentMethod {
+	#owner: string;
 	#limit: number;
 	#bankAccount: BankAccount;
-	constructor(bankAccount: BankAccount, limit: number) {
+	constructor(owner: string, bankAccount: BankAccount, limit: number) {
+		this.#owner = owner;
 		this.#bankAccount = bankAccount;
 		this.#limit = limit;
 	}
@@ -19,5 +21,8 @@ export default class CreditCard implements IPaymentMethod {
 	}
 	get bankAccount() {
 		return this.#bankAccount;
+	}
+	get owner() {
+		return this.#owner;
 	}
 }

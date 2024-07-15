@@ -4,13 +4,19 @@ import Item from './Item';
 import Cashier from './Cashier';
 
 export default class Customer {
+	#id: string;
 	#name: string;
 	#paymentMethod: IPaymentMethod;
 	#cart: Cart;
 	constructor(name: string, cart: Cart, paymentMethod: IPaymentMethod) {
+		this.#id = name + '-' + Date.now();
 		this.#name = name;
 		this.#cart = cart;
 		this.#paymentMethod = paymentMethod;
+	}
+
+	get id() {
+		return this.#id;
 	}
 
 	get name() {
@@ -30,6 +36,14 @@ export default class Customer {
 	};
 
 	orderCheckout = (cashier: Cashier) => {
-		return cashier.processCheckout(this.#cart.items, this.#paymentMethod);
+		return cashier.processCheckout(this.#cart, this.#paymentMethod);
+	};
+
+	checkBalance = () => {
+		console.log(this.#paymentMethod.bankAccount.balance);
+	};
+
+	checkLimit = () => {
+		console.log(this.#paymentMethod.limit);
 	};
 }
